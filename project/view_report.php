@@ -208,13 +208,14 @@ if($_SESSION["loginUser"]!="")
             // fclose($myfile);
             // $files = scandir($target_open_location);
             $files = array_diff(scandir($target_open_location), array('.', '..'));
+            echo "Attached Report:";
             foreach($files as $file) {
                 $target_open_location_file = "uploads/".$report_id."/".$file;
                 // $myfile = fopen($target_open_location_file, "r") or die("Unable to open file!");
                 // fclose($myfile);
                 // $handle = fopen($target_open_location_file, "r"); 
                 // echo file_get_contents($target_open_location_file);
-                echo $file;
+                echo "<a href='".$target_open_location_file."'>".$file."</a>";
             //do your work here
             }
         }
