@@ -3,10 +3,11 @@ session_start();
 include 'dbconnection.php';
 if($_SESSION["loginUser"]!="")
 {
-    $report_id=$_GET["report_id"];
-    $user_id=$_GET["user_id"];
-    $doctor_id=$_GET["doctor_id"];
-    $user_doctor_id=$_GET["id"];
+    // var_dump($_POST);
+    $report_id=$_POST["report_id"];
+    $user_id=$_POST["user_id"];
+    $doctor_id=$_POST["doctor_id"];
+    $user_doctor_id=$_POST["id"];
 ?>
 <html>
  <head>
@@ -76,13 +77,12 @@ if($_SESSION["loginUser"]!="")
         mysqli_query($db, $query) or die('Error querying database.');
         $result = mysqli_query($db, $query);
         $row = mysqli_fetch_array($result);
-
         $query_d = "SELECT DOCTOR_ID,DOCTOR_NAME,DOCTOR_MOBILE,DOCTOR_EMAIL,SPECIALIST FROM doctor_details where DOCTOR_ID='".$doctor_id."'";
         mysqli_query($db, $query_d) or die('Error querying database.');
         $result_d = mysqli_query($db, $query_d);
         $row_d = mysqli_fetch_array($result_d);
         
-        $query_r = "SELECT APPOINTMENT_DATE,DOCTOR_COMMENTS,REPORTS_DETAILS FROM user_doctor_appointments where ID='".$user_doctor_id."'";
+        $query_r = "SELECT TECHNICIAN_NAME,APPOINTMENT_DATE,DOCTOR_COMMENTS,REPORTS_DETAILS FROM user_doctor_appointments where ID='".$user_doctor_id."'";
         mysqli_query($db, $query_r) or die('Error querying database.');
         $result_r = mysqli_query($db, $query_r);
         $row_r = mysqli_fetch_array($result_r);
@@ -179,6 +179,10 @@ if($_SESSION["loginUser"]!="")
         </thead>
         <tbody>
             <tr>
+                <td>Technician Name</td>
+                <td><?php echo $row_r['TECHNICIAN_NAME'] ?></td>
+            </tr>
+            <tr>
                 <td>Appoinment Date</td>
                 <td><?php echo $row_r['APPOINTMENT_DATE'] ?></td>
             </tr>
@@ -208,16 +212,20 @@ if($_SESSION["loginUser"]!="")
             // fclose($myfile);
             // $files = scandir($target_open_location);
             $files = array_diff(scandir($target_open_location), array('.', '..'));
-            echo "Attached Report:";
+            echo "<table class='table table-condensed'>";
+            echo "<thead><tr><th>Attached Report</th></tr></thead>";
             foreach($files as $file) {
                 $target_open_location_file = "uploads/".$report_id."/".$file;
                 // $myfile = fopen($target_open_location_file, "r") or die("Unable to open file!");
                 // fclose($myfile);
                 // $handle = fopen($target_open_location_file, "r"); 
                 // echo file_get_contents($target_open_location_file);
-                echo "<a href='".$target_open_location_file."'>".$file."</a>";
+                echo "<tr><td>".$file."</td>";
+                echo "<td><a href='".$target_open_location_file."'>Click to View</a></td>";
+                echo "<td><a href='".$target_open_location_file."'download>Click to Download</a></td></tr>";
             //do your work here
             }
+            echo "</table>";
         }
         else{
             echo "No Reports Uploaded";

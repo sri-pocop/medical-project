@@ -80,6 +80,7 @@ if($_SESSION["loginUser"]=="doctor")
 ?>
 <input type="submit" name="update" value="Update">
 </form>
+  <a href="change_password.php">ChangePassword</a>
 </div>
 </body>
 </html>
