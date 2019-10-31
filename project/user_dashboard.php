@@ -10,6 +10,7 @@ if($_SESSION["loginUser"]=="user")
  <meta charset="UTF-8">
 <title>Dashboard</title>
  <link rel="stylesheet" href="css/bootstrap.css">
+ <script src="script/javascripts.js"></script>
  </head>
  <body>
  <div class="container" align="center">
@@ -57,7 +58,8 @@ if($_SESSION["loginUser"]=="user")
         echo "<td>"  . $row['DOCTOR_ID'] . "</td>";
         echo "<td>"  . $row['APPOINTMENT_DATE'] . "</td>";
         echo "<td>"  . $row['DOCTOR_COMMENTS'] . "</td>";
-        echo "<td><input type='button' value='view' onclick='location.href=\"view_report.php?report_id=".$row['REPORT_ID']."&user_id=".$user_id."&doctor_id=".$row['DOCTOR_ID']."&id=".$row['ID']."\"')></td";
+        echo "<td><input type='button' value='view' onclick=\"dynamicpost('".$row['REPORT_ID']."','".$user_id."','".$row['DOCTOR_ID']."','".$row['ID']."')\"></td>";
+        // echo "<td><input type='button' value='view' onclick='location.href=\"view_report.php?report_id=".$row['REPORT_ID']."&user_id=".$user_id."&doctor_id=".$row['DOCTOR_ID']."&id=".$row['ID']."\"')></td";
         echo "</tr>";        
       }
     ?>

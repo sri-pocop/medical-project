@@ -8,6 +8,7 @@ if($_SESSION["loginUser"]=="doctor")
   {
       $patient_id=$_POST['patient_id'];
       $patient_name=$_POST['patient_name'];
+      $technician_name=$_POST['technician_name'];
       $patient_comments=$_POST['patient_comments'];
       $report_available=$_POST['report_available'];
       
@@ -27,7 +28,7 @@ if($_SESSION["loginUser"]=="doctor")
       
       if($patient_id != '')
       {
-        $query_insert = "INSERT INTO user_doctor_appointments(USER_ID,USER_NAME,DOCTOR_ID,DOCTOR_COMMENTS,REPORTS_DETAILS,REPORT_ID) VALUES('".$patient_id."','".$patient_name."','".$doctor_id."','".$patient_comments."','".$report_available."','".$max_report_id."')";
+        $query_insert = "INSERT INTO user_doctor_appointments(USER_ID,USER_NAME,DOCTOR_ID,TECHNICIAN_NAME,DOCTOR_COMMENTS,REPORTS_DETAILS,REPORT_ID) VALUES('".$patient_id."','".$patient_name."','".$doctor_id."','".$technician_name."','".$patient_comments."','".$report_available."','".$max_report_id."')";
         mysqli_query($db, $query_insert) or die('Error querying database.');
       }
       $target_dir = "uploads/".$max_report_id."/";
@@ -83,8 +84,9 @@ if($_SESSION["loginUser"]=="doctor")
 <html>
  <head>
  <meta charset="UTF-8">
-<title>Profile</title>
+<title>Enter Report</title>
  <link rel="stylesheet" href="css/bootstrap.css">
+ <script src="script/javascripts.js"></script>
  <script src="script/jquery.js"></script>
  <script>
     function radio_on_change()
@@ -136,12 +138,47 @@ if($_SESSION["loginUser"]=="doctor")
 ?>
 <table class="table table-condensed">
   <tr>
+    <td>Select Patient</td>
+    <td>
+      <select name="select_patient" onchange="autofillpatient(this)">
+        <option value="">Select</option>
+        <?php
+          $select_patient_query = "SELECT USER_ID,USER_NAME FROM user_details";
+          mysqli_query($db, $select_patient_query) or die('Error querying database.');
+          $select_patient_result = mysqli_query($db, $select_patient_query);
+          while ($select_patient_row = mysqli_fetch_array($select_patient_result))
+          {
+            echo "<option value='".$select_patient_row['USER_ID']."' p_name='".$select_patient_row['USER_NAME']."'>".$select_patient_row['USER_ID']." ".$select_patient_row['USER_NAME']."</option>";
+          }
+        ?>
+      </select>
+    </td>
+  </tr>
+  <tr>
     <td>Patient ID</td>
-    <td><input type="text" name="patient_id" value=""></td>
+    <td><input type="text" name="patient_id" id="patient_id" value=""></td>
   </tr>
   <tr>
     <td>Patient Name</td>
-    <td><input type="text" name="patient_name" value=""></td>
+    <td><input type="text" name="patient_name" id="patient_name" value=""></td>
+  </tr>
+  <tr>
+    <td>Technician Name</td>
+    <td>
+      <input type="text" name="technician_name" id="technician_name" value="">&nbsp;
+      <select name="select_technician" onchange="autofilltechnician(this)">
+        <option value="">Select</option>
+        <?php
+          $select_technician_query = "SELECT TECHNICIAN_NAME,CONTACT_NUMBER,DETAILS FROM technician_details";
+          mysqli_query($db, $select_technician_query) or die('Error querying database.');
+          $select_technician_result = mysqli_query($db, $select_technician_query);
+          while ($select_technician_row = mysqli_fetch_array($select_technician_result))
+          {
+            echo "<option value='".$select_technician_row['TECHNICIAN_NAME']."'>".$select_technician_row['TECHNICIAN_NAME']."</option>";
+          }
+        ?>
+      </select>
+    </td>
   </tr>
   <tr>
     <td>Comments</td>
